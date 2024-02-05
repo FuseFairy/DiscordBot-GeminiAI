@@ -2,7 +2,7 @@
 ## Use Google's AI on discord, with highly customizable features.
 Currently, the bot only supports the Gemini Pro model, with plans to gradually add other Google models in the future!.
 
-![demo](https://i.imgur.com/u9IKW1T.gif)
+![demo](gif\demo.gif)
    
 ## Features
 - **Gemini Pro Model:** The bot currently supports the Gemini Pro model for powerful AI interactions.
