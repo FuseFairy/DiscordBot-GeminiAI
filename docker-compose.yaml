@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  discord_edgegpt:
+    build: .
+    environment:
+      - DISCORD_BOT_TOKEN=${DISCORD_BOT_TOKEN}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - SETTING_CHANNEL_ID=${SETTING_CHANNEL_ID}
+      - CHAT_CHANNEL_ID=${CHAT_CHANNEL_ID}
+      - RESET_CHAT_CHANNEL_ID=${RESET_CHAT_CHANNEL_ID}
+      - CHARACTER_CHANNEL_ID=${CHARACTER_CHANNEL_ID}

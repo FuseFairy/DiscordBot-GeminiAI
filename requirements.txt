@@ -1,0 +1,3 @@
+discord.py==2.3.2
+python-dotenv==0.21.0
+google-generativeai==0.3.2
