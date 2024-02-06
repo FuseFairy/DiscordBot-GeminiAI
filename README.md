@@ -32,7 +32,7 @@ https://github.com/FuseFairy/DiscordBot-GoogleGPT/assets/78064680/6420fa79-7c84-
     * [avatar]：Upload your favorite character avatar.
     * [name]：Can set your character name.
     * [temperature]：Controls the level of randomness in the output, ranging from highly varied (closer to 1.0) to less surprising (closer to 0.0).
-    * [harrassment]、[hate_speech]、[sexually_explicit]、[dangerous_content]：[click to see detail](https://ai.google.dev/docs/safety_setting_gemini), the default is to block some.
+    * [harrassment]、[hate_speech]、[sexually_explicit]、[dangerous_content]：[click to see detail](https://ai.google.dev/docs/safety_setting_gemini), the default is to Block some.
 
     ![create character](https://i.imgur.com/WybR2Ke.png)
   
