@@ -15,7 +15,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/${{ github.repository_owner }}/discordBot-googlegpt
+          images: ghcr.io/${{ github.repository_owner }}/discordbot-googlegpt
           tags: |
             type=semver,pattern={{version}}
       - name: Login to GitHub Container Registry
