@@ -15,7 +15,7 @@ https://github.com/FuseFairy/DiscordBot-GoogleGPT/assets/78064680/6420fa79-7c84-
 
    </summary>
    
-* `/appi_key setting [choice] [api_key]`
+* `/api_key setting [choice] [api_key]`
   * Can upload own google api key or delete it. (api key get from https://makersuite.google.com/app/apikey)
     * [choice]：`delete` or `set` your api key
 
