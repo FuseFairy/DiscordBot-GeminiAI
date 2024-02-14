@@ -160,14 +160,14 @@ class UserChatbot():
         self.use_character = use_character
 
         if self.use_character and (self.avatar_url == None or self.ch_name == None):
-            await interaction.response.send_message("> **ERROR：Please use `/character` command to set your character first.**", ephemeral=True)
+            await interaction.response.send_message("> **ERROR：Please use `/character setting` command to set your *avatar_url* and *ch_name* first.**", ephemeral=True)
             return False
 
         self.use_prompt = use_prompt
 
         if self.use_prompt:
             if not self.prompt:
-                await interaction.response.send_message("> **ERROR：Please use `/setting` command to set your prompt first.**", ephemeral=True)
+                await interaction.response.send_message("> **ERROR：Please use `/character setting` command to set your *prompt* first.**", ephemeral=True)
                 return False
             self.chatbot = self.g_model.start_chat(history=self.prompt)
         else:
