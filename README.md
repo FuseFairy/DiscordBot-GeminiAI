@@ -1,4 +1,4 @@
-# DiscordBot-GoogleGPT
+# DiscordBot-GeminiAI
 ## Use Gemini on Discord, with highly customizable features. Using Thread to Create Personal Conversations with AI.
 Currently, the bot only supports the Gemini Pro model, with plans to gradually add other Google models in the future!.
 
