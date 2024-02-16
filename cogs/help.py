@@ -17,7 +17,6 @@ class Help(Cog_Extension):
         embed.add_field(name="/api_key setting", value="Can set or delete your personal api key.", inline=False)
         embed.add_field(name="/create conversation", value="Create thread for conversation.", inline=False)
         embed.add_field(name="/reset conversation", value="Reset your conversation.", inline=False)
-        embed.add_field(name="/character setting", value="Setting character or setting some parameters.", inline=False)
         await interaction.response.send_message(embed=embed)
 
 async def setup(bot):
