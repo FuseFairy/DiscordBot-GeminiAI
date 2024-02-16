@@ -2,7 +2,10 @@
 ## Use Gemini on Discord, with highly customizable features. Using Thread to Create Personal Conversations with AI.
 Currently, the bot only supports the Gemini Pro model, with plans to gradually add other Google models in the future!.
 
-https://github.com/FuseFairy/DiscordBot-GoogleGPT/assets/78064680/6420fa79-7c84-4d9c-8c2f-7405e49cca23
+![demo](https://i.imgur.com/OO52TfC.gif)
+
+## Update
+> ### 2023/2/16：Add Gemini 1.0 Pro model.
    
 ## Features
 - **Gemini Pro Model:** The bot currently supports the Gemini Pro model for powerful AI interactions.
@@ -21,27 +24,13 @@ https://github.com/FuseFairy/DiscordBot-GoogleGPT/assets/78064680/6420fa79-7c84-
 
   ![setting](https://i.imgur.com/QWcaGG6.png)
   
-* `/character setting [prompt] [avatar] [name] [temperature] [harrassment] [hate_speech] [sexually_explicit] [dangerous_content]`
-  * Can be used to customize a character or adjust some attributes on the model.
-    * [prompt]：[click to see detail](https://ai.google.dev/docs/prompt_intro), go to Google AI Studio website to create new chat prompt, then write your prompt example, after finish, press `<> Get code` and copy and paste to `prompt`.
-
-        ![prompt](https://i.imgur.com/lty9iHo.png)
-
-        ![copy](https://i.imgur.com/PsVuAoh.png)
-
-    * [avatar]：Upload your favorite character avatar.
-    * [name]：Can set your character name.
-    * [temperature]：Controls the level of randomness in the output, ranging from highly varied (closer to 1.0) to less surprising (closer to 0.0).
-    * [harrassment]、[hate_speech]、[sexually_explicit]、[dangerous_content]：It's [Safety Settings](https://ai.google.dev/docs/safety_setting_gemini#safety-settings), the default is to Block some.
-
-    ![create character](https://i.imgur.com/WybR2Ke.png)
-  
 * `/create conversation [model] [type] [use_prompt] [use_character]`
   * Create a thread exclusively for the user to chat with the bot.
-    * [model]：Choose model.
+    * [model]：Choose AI model.
     * [type]：Choose thread type, private or public.
-    * [use_prompt]：Whether to use a prompt.
-    * [use_character]：Enable it after you have set the 'name' and 'avatar' parameters using '/character setting'.
+    * [temperature]：Controls the level of randomness in the output, ranging from highly varied (closer to 1.0) to less surprising (closer to 0.0).
+    * [harrassment]、[hate_speech]、[sexually_explicit]、[dangerous_content]：It's [Safety Settings](https://ai.google.dev/docs/safety_setting_gemini#safety-settings), the default is Block some.
+
 
 * `/reset conversation`
   * It will only clear the chat history, personalization settings will remain unchanged.
@@ -57,7 +46,7 @@ pip install -r requirements.txt
 
 ### Discord bot permission
 
-![permission](https://i.imgur.com/2uxDRA6.png)
+![permission](https://i.imgur.com/ZHYlRJH.png)
 
 ### .env setting
 
@@ -77,9 +66,6 @@ CHAT_CHANNEL_ID=
 
 # specific channel for /reset conversation
 RESET_CHAT_CHANNEL_ID=
-
-# specific channel for /character setting
-CHARACTER_CHANNEL_ID=
 
 # specific channel for /help
 HELP_CMD_CHANNEL_ID=
