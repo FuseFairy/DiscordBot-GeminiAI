@@ -9,7 +9,7 @@ logger = setup_logger(__name__)
 class Event(Cog_Extension):
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
-        if message.author == self.bot.user or message.webhook_id:
+        if message.author == self.bot.user:
             return
         try:
             if isinstance(message.channel, discord.Thread):
