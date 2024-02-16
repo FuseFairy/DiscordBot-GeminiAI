@@ -26,7 +26,7 @@ class Event(Cog_Extension):
                 if user_thread != None and user_thread.id == message.channel.id:
                     content = message.content
                     logger.info(f"\x1b[31m{username}\x1b[0m：'{content}' ({channel}) [model：{users_chatbot[user_id].get_model()}]")
-                    await users_chatbot[user_id].send_message(channel=message.channel.parent, message=content)
+                    await users_chatbot[user_id].send_message(message=content)
         except Exception as e:
             await message.channel.send(f"> **ERROR：{e}**")
             logger.error(f"Error：{e}")   
