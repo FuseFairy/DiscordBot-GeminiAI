@@ -12,8 +12,7 @@ tracemalloc.start()
 
 users_chatbot = {}
 
-async def set_chatbot(user_id, api_key=None, model=None, prompt=None, avatar_url=None, ch_name=None,
-                      temperature: float=None, harassment=None, hate_speech=None, sexually_explicit=None, dangerous_content=None):
+async def set_chatbot(user_id, api_key=None, model=None, temperature: float=None, harassment=None, hate_speech=None, sexually_explicit=None, dangerous_content=None):
     if user_id not in users_chatbot:
         users_chatbot[user_id] = UserChatbot(user_id)
     chatbot = users_chatbot[user_id]
@@ -22,15 +21,6 @@ async def set_chatbot(user_id, api_key=None, model=None, prompt=None, avatar_url
 
     if model:
         chatbot.set_model(model)
-    
-    if prompt:
-        chatbot.set_prompt(prompt)
-
-    if avatar_url:
-        chatbot.set_avatar_url(avatar_url)
-    
-    if ch_name:
-        chatbot.set_ch_name(ch_name)
     
     if temperature:
         chatbot.set_temperature(temperature)
@@ -58,11 +48,6 @@ class UserChatbot():
         self.thread = None
         self.model = None
         self.g_model = None
-        self.avatar_url = None
-        self.ch_name = None
-        self.prompt = []
-        self.use_prompt = None
-        self.use_character = None
         self.user_id = user_id
         self.generation_config = {
             "temperature": 0.9,
@@ -113,23 +98,6 @@ class UserChatbot():
     def get_chatbot(self):
         return self.chatbot
     
-    def set_avatar_url(self, avatar_url):
-        self.avatar_url = avatar_url
-    
-    def get_avatar_url(self):
-        return self.avatar_url
-    
-    def set_ch_name(self, ch_name):
-        self.ch_name = ch_name
-    
-    def get_ch_name(self):
-        return self.ch_name
-    
-    def set_prompt(self, prompt: str):
-        last_comma_index = prompt.rfind(',')
-        fixed_string = prompt[:last_comma_index] + prompt[last_comma_index+1:]
-        self.prompt = json.loads(fixed_string)
-    
     def set_temperature(self, temperature):
         self.generation_config["temperature"] = temperature
     
@@ -145,56 +113,28 @@ class UserChatbot():
     def set_dangerous_content(self, dangerous_content):
         self.safety_settings[3]["threshold"] = dangerous_content
 
-    async def initialize_chatbot(self, interaction: discord.Interaction, use_prompt: bool, use_character: bool):
+    async def initialize_chatbot(self, interaction: discord.Interaction):
         if self.api_key == None and os.getenv("GOOGLE_API_KEY"):
             self.api_key = os.getenv("GOOGLE_API_KEY")
         elif self.api_key == None:
-            await interaction.response.send_message("> **ERROR：Please upload your api key.**", ephemeral=True)
+            await interaction.followup.send("> **ERROR：Please upload your api key.**")
             return False
 
         genai.configure(api_key=self.api_key)
         self.g_model = genai.GenerativeModel(model_name=self.model,
                                       generation_config=self.generation_config,
                                       safety_settings=self.safety_settings)
-        
-        self.use_character = use_character
-
-        if self.use_character and (self.avatar_url == None or self.ch_name == None):
-            await interaction.response.send_message("> **ERROR：Please use `/character setting` command to set your *avatar_url* and *ch_name* first.**", ephemeral=True)
-            return False
-
-        self.use_prompt = use_prompt
-
-        if self.use_prompt:
-            if not self.prompt:
-                await interaction.response.send_message("> **ERROR：Please use `/character setting` command to set your *prompt* first.**", ephemeral=True)
-                return False
-            self.chatbot = self.g_model.start_chat(history=self.prompt)
-        else:
-            self.chatbot = self.g_model.start_chat(history=[])
+        self.chatbot = self.g_model.start_chat(history=[])
         return True
 
-    async def send_message(self, channel: discord.TextChannel, message: str):
+    async def send_message(self, message: str):
         if not self.sem_send_message.locked():
             async with self.sem_send_message:
                 async with self.thread.typing():
-                    if self.model == "gemini-pro":
-                        if self.use_character:
-                            webhooks = await channel.webhooks()
-                            webhook = None        
-                            for wh in webhooks:
-                                if wh.name == 'Character_msg': webhook = wh
-
-                            if not webhook:
-                                webhook = await channel.create_webhook(name='Character_msg')
-                            await send_message(self.chatbot, message, self.thread, self.avatar_url, self.ch_name, webhook) 
-                        else:
-                            await send_message(self.chatbot, message, self.thread)                 
+                    if self.model == "gemini-pro" or "gemini-1.0-pro":
+                        await send_message(self.chatbot, message, self.thread)                 
         else:
             await self.thread.send("> **ERROE：Please wait for the previous command to complete.**")
 
     async def reset_conversation(self):
-        if self.use_prompt:
-            self.chatbot = self.g_model.start_chat(history=self.prompt)
-        else:
-            self.chatbot = self.g_model.start_chat(history=[])
+        self.chatbot = self.g_model.start_chat(history=[])
