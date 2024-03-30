@@ -21,9 +21,11 @@ class GeminiAI(Cog_Extension):
     async def cookies_setting(self, interaction: discord.Interaction, choice:app_commands.Choice[str], api_key: str=None):
         await interaction.response.defer(ephemeral=True, thinking=True)
 
-        allowed_channel_id = os.getenv("SETTING_CHANNEL_ID")
-        if allowed_channel_id and int(allowed_channel_id) != interaction.channel_id:
-            await interaction.followup.send(f"> **Command can only used on <#{allowed_channel_id}>**")
+        allowed_channel_id = os.getenv("SETTING_CHANNEL_ID", "")
+        allowed_channel_id_list = allowed_channel_id.split(',')
+        if allowed_channel_id_list and str(interaction.channel_id) not in allowed_channel_id_list:
+            allowed_channels_mention = ', '.join(f"<#{id_}>" for id_ in allowed_channel_id_list)
+            await interaction.followup.send(f"> **Command can only be used in the following channels: {allowed_channels_mention}**")
             return
 
         user_id = interaction.user.id
@@ -57,9 +59,11 @@ class GeminiAI(Cog_Extension):
                     dangerous_content: app_commands.Choice[str]=None):
         await interaction.response.defer(thinking=True)
 
-        allowed_channel_id = os.getenv("CHAT_CHANNEL_ID")
-        if allowed_channel_id and int(allowed_channel_id) != interaction.channel_id:
-            await interaction.followup.send(f"> **ERROR：Command can only used on <#{allowed_channel_id}>.**")
+        allowed_channel_id = os.getenv("CHAT_CHANNEL_ID", "")
+        allowed_channel_id_list = allowed_channel_id.split(',')
+        if allowed_channel_id_list and str(interaction.channel_id) not in allowed_channel_id_list:
+            allowed_channels_mention = ', '.join(f"<#{id_}>" for id_ in allowed_channel_id_list)
+            await interaction.followup.send(f"> **Command can only be used in the following channels: {allowed_channels_mention}**")
             return
 
         if isinstance(interaction.channel, discord.Thread):
@@ -103,9 +107,11 @@ class GeminiAI(Cog_Extension):
     async def reset_conversation(self, interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=True, thinking=True)
 
-        allowed_channel_id = os.getenv("RESET_CHAT_CHANNEL_ID")
-        if allowed_channel_id and int(allowed_channel_id) != interaction.channel_id:
-            await interaction.followup.send(f"> **ERROR：Command can only used on <#{allowed_channel_id}>**")
+        allowed_channel_id = os.getenv("RESET_CHAT_CHANNEL_ID", "")
+        allowed_channel_id_list = allowed_channel_id.split(',')
+        if allowed_channel_id_list and str(interaction.channel_id) not in allowed_channel_id_list:
+            allowed_channels_mention = ', '.join(f"<#{id_}>" for id_ in allowed_channel_id_list)
+            await interaction.followup.send(f"> **Command can only be used in the following channels: {allowed_channels_mention}**")
             return
         users_chatbot = get_users_chatbot()
         user_id = interaction.user.id
