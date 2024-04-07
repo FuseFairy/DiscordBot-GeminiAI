@@ -15,7 +15,7 @@ class Help(Cog_Extension):
             allowed_channels_mention = ', '.join(f"<#{id_}>" for id_ in allowed_channel_id_list)
             await interaction.response.send_message(f"> **Command can only be used on: {allowed_channels_mention}**", ephemeral=True)
             return
-        embed=discord.Embed(description="[FuseFairy/DiscordBot-GoogleGPT](https://github.com/FuseFairy/DiscordBot-GoogleGPT/blob/main/README.md)\n***COMMANDS -***")
+        embed=discord.Embed(description="[FuseFairy/DiscordBot-GeminiAI](https://github.com/FuseFairy/DiscordBot-GeminiAI/blob/main/README.md)\n***COMMANDS -***")
         embed.add_field(name="/api_key setting", value="Can set or delete your personal api key.", inline=False)
         embed.add_field(name="/create conversation", value="Create thread for conversation.", inline=False)
         embed.add_field(name="/reset conversation", value="Reset your conversation.", inline=False)
