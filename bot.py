@@ -35,7 +35,7 @@ async def on_ready():
     logger.info(f'{bot.user} is now running!')
     try:
         synced = await bot.tree.sync()
-        print(f"Synced {len(synced)} commands")
+        logger.info(f"Synced {len(synced)} commands")
     except Exception as e:
         logger.error(f"Error：{e}")
 
