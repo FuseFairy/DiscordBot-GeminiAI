@@ -25,11 +25,19 @@ class Event(Cog_Extension):
 
                 if user_thread != None and user_thread.id == message.channel.id:
                     content = message.content
+                    image_url = None
+                    if message.attachments:
+                        for attachment in message.attachments:
+                            if "image" in attachment.content_type:
+                                image_url = attachment.url
+                            else:
+                                await message.channel.send("> **ERROR：This file format is not supported.**")
+                                return
+                    await users_chatbot[user_id].send_message(message=content, image_url=image_url)
                     logger.info(f"\x1b[31m{username}\x1b[0m：'{content}' ({channel}) [model：{users_chatbot[user_id].get_model()}]")
-                    await users_chatbot[user_id].send_message(message=content)
         except Exception as e:
             await message.channel.send(f"> **ERROR：{e}**")
-            logger.error(f"Error：{e}")   
+            logger.error(f"Error：{e}", exc_info=True)   
                                    
 async def setup(bot):
     await bot.add_cog(Event(bot))

@@ -1,10 +1,11 @@
 import discord
 import os
-import json
 import tracemalloc
+from gemini_webapi import GeminiClient
 import google.generativeai as genai
 from asyncio import Semaphore
-from src.response import send_message
+from src.gemini.response import send_gemini_message
+from src.bard.response import send_bard_message
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -12,10 +13,15 @@ tracemalloc.start()
 
 users_chatbot = {}
 
-async def set_chatbot(user_id, api_key=None, model=None, temperature: float=None, harassment=None, hate_speech=None, sexually_explicit=None, dangerous_content=None):
+async def set_chatbot(user_id, api_key=None, model=None, temperature: float=None, harassment=None,
+                      hate_speech=None, sexually_explicit=None, dangerous_content=None, bard_cookies: list=[]):
     if user_id not in users_chatbot:
         users_chatbot[user_id] = UserChatbot(user_id)
     chatbot = users_chatbot[user_id]
+    
+    if bard_cookies:
+        chatbot.set_bard_cookies(bard_cookies)
+
     if api_key:
         chatbot.set_api_key(api_key)
 
@@ -39,7 +45,6 @@ async def set_chatbot(user_id, api_key=None, model=None, temperature: float=None
 
 def get_users_chatbot():
     return users_chatbot
-    
 class UserChatbot():
     def __init__(self, user_id):
         self.sem_send_message = Semaphore(1)
@@ -49,6 +54,7 @@ class UserChatbot():
         self.model = None
         self.g_model = None
         self.user_id = user_id
+        self.bard_cookies = []
         self.generation_config = {
             "temperature": 0.9,
             "top_p": 1,
@@ -113,26 +119,41 @@ class UserChatbot():
     def set_dangerous_content(self, dangerous_content):
         self.safety_settings[3]["threshold"] = dangerous_content
 
-    async def initialize_chatbot(self, interaction: discord.Interaction):
-        if self.api_key == None and os.getenv("GOOGLE_API_KEY"):
-            self.api_key = os.getenv("GOOGLE_API_KEY")
-        elif self.api_key == None:
-            await interaction.followup.send("> **ERROR：Please upload your api key.**")
-            return False
+    def set_bard_cookies(self, bard_cookies: list):
+        self.bard_cookies = bard_cookies
+    
+    def del_bard_cookies(self):
+        self.bard_cookies.clear()
 
-        genai.configure(api_key=self.api_key)
-        self.g_model = genai.GenerativeModel(model_name=self.model,
-                                      generation_config=self.generation_config,
-                                      safety_settings=self.safety_settings)
-        self.chatbot = self.g_model.start_chat(history=[])
-        return True
+    async def initialize_chatbot(self, interaction: discord.Interaction=None):
+        if self.model == "bard":
+            if self.bard_cookies == []:
+                self.bard_cookies = [os.getenv("BARD_SECURE_1PSIDTS"), os.getenv("BARD_SECURE_1PSID")]
+            self.chatbot = GeminiClient(secure_1psid=self.bard_cookies[1], secure_1psidts=self.bard_cookies[0])
+            await self.chatbot.init(timeout=30, auto_close=False, auto_refresh=False, verbose=False)
+        else:
+            if self.api_key == None and os.getenv("GOOGLE_API_KEY"):
+                self.api_key = os.getenv("GOOGLE_API_KEY")
+            elif self.api_key == None:
+                await interaction.followup.send("> **ERROR：Please upload your api key.**")
+                return False
 
-    async def send_message(self, message: str):
+            genai.configure(api_key=self.api_key)
+            self.g_model = genai.GenerativeModel(model_name=self.model,
+                                        generation_config=self.generation_config,
+                                        safety_settings=self.safety_settings)
+            self.chatbot = self.g_model.start_chat(history=[])
+            return True
+
+    async def send_message(self, message: str, image_url: str=None):
         if not self.sem_send_message.locked():
             async with self.sem_send_message:
                 async with self.thread.typing():
-                    if self.model == "gemini-pro" or "gemini-1.0-pro":
-                        await send_message(self.chatbot, message, self.thread)                 
+                    if self.model == "gemini-pro" or self.model == "gemini-1.0-pro":
+                        await send_gemini_message(self.chatbot, message, self.thread)
+                    elif self.model == "bard":
+                        await send_bard_message(self.chatbot, message, image_url, self.thread)
+
         else:
             await self.thread.send("> **ERROE：Please wait for the previous command to complete.**")
 
