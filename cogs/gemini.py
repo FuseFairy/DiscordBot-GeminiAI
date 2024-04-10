@@ -9,14 +9,14 @@ logger = setup_logger(__name__)
 
 class GeminiAI(Cog_Extension):
     api_key_group = app_commands.Group(name="api_key", description="upload api_key.")
-    create_group = app_commands.Group(name="create", description="Create conversation.")
+    gemini_group = app_commands.Group(name="gemini", description="Create conversation with Gemini.")
     reset_group = app_commands.Group(name="reset", description="Reset conversation.")
 
-    @api_key_group.command(name="setting", description="Can setup or delete your personal api key.")
+    @api_key_group.command(name="setting-gemini", description="Can setup or delete your personal Gemini api key.")
     @app_commands.choices(choice=[app_commands.Choice(name="set", value="set"),app_commands.Choice(name="delete", value="del") ])
     async def cookies_setting(self, interaction: discord.Interaction, choice:app_commands.Choice[str], api_key: str=None):
         await interaction.response.defer(ephemeral=True, thinking=True)
-        if not await check_channel(interaction, "SETTING_CHANNEL_ID"):
+        if not await check_channel(interaction, "GEMINI_SETTING_CHANNEL_ID"):
             return
 
         user_id = interaction.user.id
@@ -38,7 +38,7 @@ class GeminiAI(Cog_Extension):
             await interaction.followup.send(f">>> **ERROR：{e}**")
 
     # Create conversation
-    @create_group.command(name="conversation", description="Create thread for conversation.")
+    @gemini_group.command(name="conversation", description="Create thread for Gemini conversation.")
     @app_commands.choices(model=[app_commands.Choice(name="Gemini Pro", value="gemini-pro"), app_commands.Choice(name="Gemini 1.0 Pro", value="gemini-1.0-pro")])
     @app_commands.choices(type=[app_commands.Choice(name="private", value="private"), app_commands.Choice(name="public", value="public")])
     @app_commands.choices(harassment=[app_commands.Choice(name="Block few", value="BLOCK_ONLY_HIGH"), app_commands.Choice(name="Block some", value="BLOCK_MEDIUM_AND_ABOVE"), app_commands.Choice(name="Block most", value="BLOCK_LOW_AND_ABOVE")])
@@ -49,7 +49,7 @@ class GeminiAI(Cog_Extension):
                     harassment: app_commands.Choice[str]=None, hate_speech: app_commands.Choice[str]=None, sexually_explicit: app_commands.Choice[str]=None,
                     dangerous_content: app_commands.Choice[str]=None):
         await interaction.response.defer(ephemeral=False, thinking=True)
-        if not await check_channel(interaction, "CHAT_CHANNEL_ID"):
+        if not await check_channel(interaction, "GEMINI_CHAT_CHANNEL_ID"):
             return
         
         if isinstance(interaction.channel, discord.Thread):
@@ -70,7 +70,7 @@ class GeminiAI(Cog_Extension):
 
             success_init = await users_chatbot[user_id].initialize_chatbot(interaction)
         except Exception as e:
-            await interaction.followup.send(f">>> **ERROR：{e}**")
+            await interaction.followup.send(f"> **ERROR：{e}**")
             return
 
         if success_init:
@@ -89,10 +89,10 @@ class GeminiAI(Cog_Extension):
             await interaction.followup.send(f"here is your thread {thread.jump_url}")
     
     # Reset conversation
-    @reset_group.command(name="conversation", description="Reset conversation.")
+    @reset_group.command(name="conversation-gemini", description="Reset Gemini conversation.")
     async def reset_conversation(self, interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=True, thinking=True)
-        if not await check_channel(interaction, "RESET_CHAT_CHANNEL_ID"):
+        if not await check_channel(interaction, "GEMINI_RESET_CHAT_CHANNEL_ID"):
             return
         
         users_chatbot = get_users_chatbot()
