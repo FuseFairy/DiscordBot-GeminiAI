@@ -50,6 +50,7 @@ class UserChatbot():
         self.sem_send_message = Semaphore(1)
         self.api_key = None
         self.chatbot = None
+        self.bard_chat = None
         self.thread = None
         self.model = None
         self.g_model = None
@@ -131,6 +132,7 @@ class UserChatbot():
                 self.bard_cookies = [os.getenv("BARD_SECURE_1PSIDTS"), os.getenv("BARD_SECURE_1PSID")]
             self.chatbot = GeminiClient(secure_1psid=self.bard_cookies[1], secure_1psidts=self.bard_cookies[0])
             await self.chatbot.init(timeout=30, auto_close=False, auto_refresh=False, verbose=False)
+            self.bard_chat = self.chatbot.start_chat()
         else:
             if self.api_key == None and os.getenv("GEMINI_API_KEY"):
                 self.api_key = os.getenv("GEMINI_API_KEY")
@@ -152,7 +154,7 @@ class UserChatbot():
                     if self.model == "gemini-pro" or self.model == "gemini-1.0-pro":
                         await send_gemini_message(self.chatbot, message, self.thread)
                     elif self.model == "bard":
-                        await send_bard_message(self.chatbot, message, image_url, self.thread)
+                        await send_bard_message(self.bard_chat, message, image_url, self.thread)
 
         else:
             await self.thread.send("> **ERROE：Please wait for the previous command to complete.**")
