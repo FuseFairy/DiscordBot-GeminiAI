@@ -1,18 +1,20 @@
 import discord
 import re
-from gemini_webapi import GeminiClient
+import requests
+from gemini_webapi import ChatSession
 from ..log import setup_logger
 
 logger = setup_logger(__name__)
 
-async def send_bard_message(chatbot: GeminiClient, message: str, image, thread: discord.Thread):
+async def send_bard_message(chat: ChatSession, message: str, image, thread: discord.Thread):
     try:
         image_embeds = []
         image_urls = ""
-        image_embed = ""
+        image_bytes = requests.get(image).content if image else None
 
-        response = await chatbot.generate_content(prompt=message, image=image)
+        response = await chat.send_message(prompt=message, image=image_bytes)
         text = response.text
+        text = re.sub(r'\[https://', '[', text)
 
         if response.images:
             for i, image in enumerate(response.images, start=1):
@@ -26,7 +28,7 @@ async def send_bard_message(chatbot: GeminiClient, message: str, image, thread: 
                     image_embeds.append(discord.Embed(url="https://gemini.google.com/").set_image(url=url))
             
             if image_urls:
-                image_embed = discord.Embed(title=f"Other Images\n{image_urls}")
+                image_embeds.append(discord.Embed(title=f"Other Images", description=image_urls))
                 
         # Discord limit about 2000 characters for a message
         while len(text) > 2000:
@@ -34,9 +36,7 @@ async def send_bard_message(chatbot: GeminiClient, message: str, image, thread: 
             text = text[2000:]
             await thread.send(temp)
         
-        if image_embeds and image_embed:
-            await thread.send(content=text, embeds=image_embeds, embed=image_embed)
-        elif image_embeds:
+        if image_embeds:
             await thread.send(content=text, embeds=image_embeds)
         else:
             await thread.send(content=text)
