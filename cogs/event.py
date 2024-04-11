@@ -33,8 +33,9 @@ class Event(Cog_Extension):
                             else:
                                 await message.channel.send("> **ERROR：This file format is not supported.**")
                                 return
-                    await users_chatbot[user_id].send_message(message=content, image_url=image_url)
                     logger.info(f"\x1b[31m{username}\x1b[0m：'{content}' ({channel}) [model：{users_chatbot[user_id].get_model()}]")
+                    await users_chatbot[user_id].send_message(message=content, image_url=image_url)
+                    
         except Exception as e:
             await message.channel.send(f"> **ERROR：{e}**")
             logger.error(f"Error：{e}", exc_info=True)   
