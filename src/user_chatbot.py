@@ -132,8 +132,8 @@ class UserChatbot():
             self.chatbot = GeminiClient(secure_1psid=self.bard_cookies[1], secure_1psidts=self.bard_cookies[0])
             await self.chatbot.init(timeout=30, auto_close=False, auto_refresh=False, verbose=False)
         else:
-            if self.api_key == None and os.getenv("GOOGLE_API_KEY"):
-                self.api_key = os.getenv("GOOGLE_API_KEY")
+            if self.api_key == None and os.getenv("GEMINI_API_KEY"):
+                self.api_key = os.getenv("GEMINI_API_KEY")
             elif self.api_key == None:
                 await interaction.followup.send("> **ERROR：Please upload your api key.**")
                 return False
