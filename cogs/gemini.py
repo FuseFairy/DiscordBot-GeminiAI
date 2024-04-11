@@ -55,39 +55,19 @@ class GeminiAI(Cog_Extension):
         if isinstance(interaction.channel, discord.Thread):
             await interaction.followup.send(">> **ERROR：This command is disabled in thread.**")
             return
-        
-        try:
-            user_id = interaction.user.id
-            users_chatbot = get_users_chatbot()
 
-            harassment_value = harassment.value if harassment else None
-            hate_speech_value = hate_speech.value if hate_speech else None
-            sexually_explicit_value = sexually_explicit.value if sexually_explicit else None
-            dangerous_content_value = dangerous_content.value if dangerous_content else None
+        user_id = interaction.user.id
+        users_chatbot = get_users_chatbot()
 
-            await set_chatbot(user_id=user_id, model = model.value, temperature=temperature,
-                          harassment=harassment_value, hate_speech=hate_speech_value, sexually_explicit=sexually_explicit_value, dangerous_content=dangerous_content_value)
+        harassment_value = harassment.value if harassment else None
+        hate_speech_value = hate_speech.value if hate_speech else None
+        sexually_explicit_value = sexually_explicit.value if sexually_explicit else None
+        dangerous_content_value = dangerous_content.value if dangerous_content else None
 
-            success_init = await users_chatbot[user_id].initialize_chatbot(interaction)
-        except Exception as e:
-            await interaction.followup.send(f"> **ERROR：{e}**")
-            return
+        await set_chatbot(user_id=user_id, model = model.value, temperature=temperature,
+                        harassment=harassment_value, hate_speech=hate_speech_value, sexually_explicit=sexually_explicit_value, dangerous_content=dangerous_content_value)
+        await users_chatbot[user_id].initialize_chatbot(interaction, type.value)
 
-        if success_init:
-            thread = users_chatbot[user_id].get_thread()
-            if thread:
-                try:
-                    await thread.delete()
-                except:
-                    pass
-            if type.value == "private":
-                type = discord.ChannelType.private_thread
-            else:
-                type = discord.ChannelType.public_thread
-            thread = await interaction.channel.create_thread(name=f"{interaction.user.name} chatroom - {model.name}", type=type)
-            users_chatbot[user_id].set_thread(thread)
-            await interaction.followup.send(f"here is your thread {thread.jump_url}")
-    
     # Reset conversation
     @reset_group.command(name="conversation-gemini", description="Reset Gemini conversation.")
     async def reset_conversation(self, interaction: discord.Interaction):

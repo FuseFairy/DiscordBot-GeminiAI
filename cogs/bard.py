@@ -1,4 +1,5 @@
 import discord
+import asyncio
 from core.classes import Cog_Extension
 from discord import app_commands
 from src.user_chatbot import get_users_chatbot, set_chatbot
@@ -35,7 +36,7 @@ class Bard(Cog_Extension):
 
     @bard_group.command(name = "conversation", description = "Create thread for Bard conversation.")
     @app_commands.choices(type=[app_commands.Choice(name="private", value="private"), app_commands.Choice(name="public", value="public")])
-    async def help(self, interaction: discord.Interaction, type: app_commands.Choice[str]):
+    async def chat(self, interaction: discord.Interaction, type: app_commands.Choice[str]):
         await interaction.response.defer(ephemeral=False, thinking=True)
         if not await check_channel(interaction, "BARD_CHAT_CHANNEL_ID"):
             return
@@ -43,29 +44,10 @@ class Bard(Cog_Extension):
             await interaction.followup.send("> **ERROR：This command is disabled in thread.**")
             return
 
-        try:
-            user_id = interaction.user.id
-            users_chatbot = get_users_chatbot()
-            await set_chatbot(user_id=user_id, model="bard")
-            await users_chatbot[user_id].initialize_chatbot()
-            thread = users_chatbot[user_id].get_thread()
-            if thread:
-                try:
-                    chatbot = users_chatbot[user_id].get_chatbot()
-                    await chatbot.close()
-                    await thread.delete()
-                except:
-                    pass
-            if type.value == "private":
-                type = discord.ChannelType.private_thread
-            else:
-                type = discord.ChannelType.public_thread
-            thread = await interaction.channel.create_thread(name=f"{interaction.user.name} chatroom - Bard", type=type)
-            users_chatbot[user_id].set_thread(thread)
-            await interaction.followup.send(f"here is your thread {thread.jump_url}")
-        except Exception as e:
-            await interaction.followup.send(f"> **ERROR：{e}**")
-            return 
+        user_id = interaction.user.id
+        users_chatbot = get_users_chatbot()
+        await set_chatbot(user_id=user_id, model="bard")
+        await users_chatbot[user_id].initialize_chatbot(interaction, type.value)
         
 
 
