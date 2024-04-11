@@ -59,10 +59,10 @@ GOOGLE_API_KEY=
 
 # Allow each commands only in specific channel, if you don't set it, just default to all channels.
 # specific channel for /api_key setting
-SETTING_CHANNEL_ID=
+SETTING_CHANNEL_ID=1010823414917845055,1010872878547444571
 
 # specific channel for /create conversation
-CHAT_CHANNEL_ID=
+CHAT_CHANNEL_ID=1010872878243444574
 
 # specific channel for /reset conversation
 RESET_CHAT_CHANNEL_ID=

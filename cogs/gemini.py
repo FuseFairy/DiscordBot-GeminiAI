@@ -68,24 +68,5 @@ class GeminiAI(Cog_Extension):
                         harassment=harassment_value, hate_speech=hate_speech_value, sexually_explicit=sexually_explicit_value, dangerous_content=dangerous_content_value)
         await users_chatbot[user_id].initialize_chatbot(interaction, type.value)
 
-    # Reset conversation
-    @reset_group.command(name="conversation-gemini", description="Reset Gemini conversation.")
-    async def reset_conversation(self, interaction: discord.Interaction):
-        await interaction.response.defer(ephemeral=True, thinking=True)
-        if not await check_channel(interaction, "GEMINI_RESET_CHAT_CHANNEL_ID"):
-            return
-        
-        users_chatbot = get_users_chatbot()
-        user_id = interaction.user.id
-
-        if user_id not in users_chatbot or users_chatbot[user_id].get_chatbot() == None:
-            await interaction.followup.send(f"> **ERROR：You don't have any conversation yet.**")
-            return
-        try:
-            await users_chatbot[user_id].reset_conversation()
-            await interaction.followup.send("> **INFO：Reset finish.**")
-        except Exception as e:
-            await interaction.followup.send(f">>> **ERROR：{e}**")
-
 async def setup(bot):
     await bot.add_cog(GeminiAI(bot))

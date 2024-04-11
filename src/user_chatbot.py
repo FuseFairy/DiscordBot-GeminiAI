@@ -181,6 +181,3 @@ class UserChatbot():
 
         else:
             await self.thread.send("> **ERROE：Please wait for the previous command to complete.**")
-
-    async def reset_conversation(self):
-        self.chatbot = self.g_model.start_chat(history=[])
