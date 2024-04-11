@@ -5,14 +5,14 @@ from src.user_chatbot import get_users_chatbot, set_chatbot
 from src.check_channel import check_channel
 
 class Bard(Cog_Extension):
-    bard_group = app_commands.Group(name="bard", description="Create conversation with Bard")
     upload_group = app_commands.Group(name="cookies", description="Upload personal Bard cookies")
+    bard_group = app_commands.Group(name="bard", description="Create conversation with Bard")
 
     @upload_group.command(name="setting-bard", description="Can setup or delete your personal Bard cookies.")
     @app_commands.choices(choice=[app_commands.Choice(name="set", value="set"), app_commands.Choice(name="delete", value="del")])
     async def cookies_setting(self, interaction: discord.Interaction, choice:app_commands.Choice[str], secure_1psidt:str=None, secure_1psidts:str=None):
         await interaction.response.defer(ephemeral=True, thinking=True)
-        if not await check_channel(interaction, "BARD_COOKIES_SETTING_CHANNEL"):
+        if not await check_channel(interaction, "BARD_COOKIES_SETTING_CHANNEL_ID"):
             return
 
         user_id = interaction.user.id
