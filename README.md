@@ -98,3 +98,9 @@ HELP_CMD_CHANNEL_ID=
 ## Credits
 * generative-ai-python - https://github.com/google/generative-ai-python
 * Gemini-API - https://github.com/HanaokaYuzu/Gemini-API
+
+## Contributors
+
+This project exists thanks to all the people who contribute.
+
+[![](https://contrib.rocks/image?repo=FuseFairy/DiscordBot-GeminiAI)](https://github.com/FuseFairy/DiscordBot-GeminiAI/graphs/contributors)
