@@ -11,7 +11,7 @@ class Bard(Cog_Extension):
 
     @upload_group.command(name="setting-bard", description="Can setup or delete your personal Bard cookies.")
     @app_commands.choices(choice=[app_commands.Choice(name="set", value="set"), app_commands.Choice(name="delete", value="del")])
-    async def cookies_setting(self, interaction: discord.Interaction, choice:app_commands.Choice[str], secure_1psidt:str=None, secure_1psidts:str=None):
+    async def cookies_setting(self, interaction: discord.Interaction, choice:app_commands.Choice[str], secure_1psid:str=None, secure_1psidts:str=None):
         await interaction.response.defer(ephemeral=True, thinking=True)
         if not await check_channel(interaction, "BARD_COOKIES_SETTING_CHANNEL_ID"):
             return
@@ -19,8 +19,8 @@ class Bard(Cog_Extension):
         user_id = interaction.user.id
         try:
             if choice.value == "set":
-                if secure_1psidt and secure_1psidts:
-                    await set_chatbot(user_id=user_id , bard_cookies=[secure_1psidts, secure_1psidt])
+                if secure_1psid and secure_1psidts:
+                    await set_chatbot(user_id=user_id , bard_cookies=[secure_1psidts, secure_1psid])
                     await interaction.followup.send(f"> **INFO：Setting success!**")
                 else:
                     await interaction.followup.send(f"> **ERROR：Please upload your `Secure_1PSIDT` and `Secure_1PSIDTS`.**")
