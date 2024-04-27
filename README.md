@@ -28,12 +28,12 @@
     * [temperature]：Controls the level of randomness in the output, ranging from highly varied (closer to 1.0) to less surprising (closer to 0.0).
     * [harrassment], [hate_speech], [sexually_explicit], [dangerous_content]：It's [Safety Settings](https://ai.google.dev/docs/safety_setting_gemini#safety-settings), the default is `Block some`.
 
-* `cookies setting-bard [choice] [secure_1psid] [secure_1psidts]`
+* `/cookies setting-bard [choice] [secure_1psid] [secure_1psidts]`
   * Can upload own Bard Cookies or delete it.
     * [choice]：`delete` or `set` your Bard Cookies.
     * [secure_1psid], [secure_1psidts]：Required Cookie Parameters.
 
-* `Bard conversation [type]`
+* `/Bard conversation [type]`
   * Create a Bard thread exclusively for the user to chat with the bot.
     * [type]：Choose thread type, private or public.
 
