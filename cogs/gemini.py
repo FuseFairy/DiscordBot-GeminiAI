@@ -10,9 +10,8 @@ logger = setup_logger(__name__)
 class GeminiAI(Cog_Extension):
     api_key_group = app_commands.Group(name="api_key", description="upload api_key.")
     gemini_group = app_commands.Group(name="gemini", description="Create conversation with Gemini.")
-    reset_group = app_commands.Group(name="reset", description="Reset conversation.")
 
-    @api_key_group.command(name="setting-gemini", description="Can setup or delete your personal Gemini api key.")
+    @api_key_group.command(name="setting-gemini", description="Can set or delete your personal Gemini api key.")
     @app_commands.choices(choice=[app_commands.Choice(name="set", value="set"),app_commands.Choice(name="delete", value="del") ])
     async def cookies_setting(self, interaction: discord.Interaction, choice:app_commands.Choice[str], api_key: str=None):
         await interaction.response.defer(ephemeral=True, thinking=True)
