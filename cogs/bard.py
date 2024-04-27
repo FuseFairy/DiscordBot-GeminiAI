@@ -1,5 +1,4 @@
 import discord
-import asyncio
 from core.classes import Cog_Extension
 from discord import app_commands
 from src.user_chatbot import get_users_chatbot, set_chatbot
@@ -9,6 +8,7 @@ class Bard(Cog_Extension):
     upload_group = app_commands.Group(name="cookies", description="Upload personal Bard cookies")
     bard_group = app_commands.Group(name="bard", description="Create conversation with Bard")
 
+    #Bard setting.
     @upload_group.command(name="setting-bard", description="Can setup or delete your personal Bard cookies.")
     @app_commands.choices(choice=[app_commands.Choice(name="set", value="set"), app_commands.Choice(name="delete", value="del")])
     async def cookies_setting(self, interaction: discord.Interaction, choice:app_commands.Choice[str], secure_1psid:str=None, secure_1psidts:str=None):
@@ -23,7 +23,7 @@ class Bard(Cog_Extension):
                     await set_chatbot(user_id=user_id , bard_cookies=[secure_1psidts, secure_1psid])
                     await interaction.followup.send(f"> **INFO：Setting success!**")
                 else:
-                    await interaction.followup.send(f"> **ERROR：Please upload your `Secure_1PSIDT` and `Secure_1PSIDTS`.**")
+                    await interaction.followup.send(f"> **ERROR：Please upload your `Secure_1PSID` and `Secure_1PSIDTS`.**")
             else:
                 users_chatbot = get_users_chatbot()
                 if user_id in users_chatbot:
@@ -34,6 +34,7 @@ class Bard(Cog_Extension):
         except Exception as e:
             await interaction.followup.send(f"> **ERROR：{e}**")
 
+    #Create thread, can chat with Bard.
     @bard_group.command(name = "conversation", description = "Create thread for Bard conversation.")
     @app_commands.choices(type=[app_commands.Choice(name="private", value="private"), app_commands.Choice(name="public", value="public")])
     async def chat(self, interaction: discord.Interaction, type: app_commands.Choice[str]):
