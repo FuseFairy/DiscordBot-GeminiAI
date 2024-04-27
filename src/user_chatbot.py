@@ -137,12 +137,12 @@ class UserChatbot():
                     if self.model == "bard":
                         if self.bard_cookies == [] and os.getenv("BARD_SECURE_1PSIDTS") and os.getenv("BARD_SECURE_1PSID"):
                             self.bard_cookies = [os.getenv("BARD_SECURE_1PSIDTS"), os.getenv("BARD_SECURE_1PSID")]
-                        else:
+                        elif self.bard_cookies == []:
                             await interaction.followup.send("> **ERROR：Please upload your Bard cookies.**")
                             return
                         
                         self.chatbot = GeminiClient(secure_1psid=self.bard_cookies[1], secure_1psidts=self.bard_cookies[0])
-                        await self.chatbot.init(timeout=30, auto_close=False, auto_refresh=False, verbose=False)
+                        await self.chatbot.init(timeout=50, auto_close=False, auto_refresh=False, verbose=False)
                         self.bard_chat = self.chatbot.start_chat()
                     else:
                         if self.api_key == None and os.getenv("GEMINI_API_KEY"):
