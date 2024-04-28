@@ -3,7 +3,13 @@
     <img alt="PyPI - Python Version" src="https://img.shields.io/badge/pyversion-3.10%2B-blue?style=flat&label=python">
   </a>
 
-![demo](https://i.imgur.com/OO52TfC.gif)
+[![Try with Replit Badge](https://replit.com/badge?caption=Try%20with%20Replit)](https://replit.com/@dd8611706/DiscordBot-GeminiAI?v=1#README.md)
+
+### Gemini Demo
+![demo1](https://i.imgur.com/OO52TfC.gif)
+
+### Bard (Gemini web) Demo
+![demo2](https://i.imgur.com/1U5kBJ0.png)
 
 ## Update
 > ### 2024/4/28：Support [Bard](https://gemini.google.com).
