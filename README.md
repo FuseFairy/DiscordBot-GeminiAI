@@ -59,6 +59,9 @@ pip install -r requirements.txt
 
 ### Get Bard Cookies
 
+> [!WARNING]
+> It may not be stable.
+
 > [!IMPORTANT]  
 > Since too many people using the same cookies may cause errors, it is recommended to ask the person who wants to use it to upload his/her own cookies.
 
