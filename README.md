@@ -67,7 +67,7 @@ pip install -r requirements.txt
 * Click any request and copy cookie values of `__Secure-1PSID` and `__Secure-1PSIDTS`
 
 ### .env setting
-
+Rename the file`.env.dev`to`.env`, then open it and edit it.
 ```markdown
 DISCORD_BOT_TOKEN=
 
