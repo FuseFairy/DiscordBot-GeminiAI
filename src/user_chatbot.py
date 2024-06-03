@@ -156,9 +156,11 @@ class UserChatbot():
                                                     generation_config=self.generation_config,
                                                     safety_settings=self.safety_settings)
                         self.chatbot = self.g_model.start_chat(history=[])
-                    
-                    if self.thread:
-                        await self.thread.delete()
+                    try:    
+                        if self.thread:
+                            await self.thread.delete()
+                    except Exception as e:
+                        pass
                     if type == "private":
                         type = discord.ChannelType.private_thread
                     else:
@@ -170,14 +172,14 @@ class UserChatbot():
         else:
             await interaction.followup.send("> **ERROR：Please wait for the previous command to complete.**")
 
-    async def send_message(self, message: str, image_url: str=None):
+    async def send_message(self, message: str, images_url: list):
         if not self.sem_send_message.locked():
             async with self.sem_send_message:
                 async with self.thread.typing():
-                    if self.model == "gemini-pro" or self.model == "gemini-1.0-pro":
+                    if self.model == "bard":
+                        await send_bard_message(self.bard_chat, message, images_url, self.thread)
+                    else:
                         await send_gemini_message(self.chatbot, message, self.thread)
-                    elif self.model == "bard":
-                        await send_bard_message(self.bard_chat, message, image_url, self.thread)
 
         else:
             await self.thread.send("> **ERROE：Please wait for the previous command to complete.**")

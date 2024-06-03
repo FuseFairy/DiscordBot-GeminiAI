@@ -6,13 +6,13 @@ from ..log import setup_logger
 
 logger = setup_logger(__name__)
 
-async def send_bard_message(chat: ChatSession, message: str, image, thread: discord.Thread):
+async def send_bard_message(chat: ChatSession, message: str, images, thread: discord.Thread):
     try:
         image_embeds = []
         image_urls = ""
-        image_bytes = requests.get(image).content if image else None
+        images_bytes = [requests.get(image).content for image in images]
 
-        response = await chat.send_message(prompt=message, image=image_bytes)
+        response = await chat.send_message(prompt=message, images=images_bytes)
         text = response.text
         text = re.sub(r'\[\d+ Images of .+?\]', '', text)
         text = re.sub(r'\[Image of [^\]]+\]', '', text)
