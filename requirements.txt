@@ -1,5 +1,5 @@
 discord.py==2.3.2
 python-dotenv==0.21.0
 google-generativeai==0.4.1
-gemini-webapi==1.1.1
+gemini-webapi==1.5.1
 importlib-metadata==7.0.1
