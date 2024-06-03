@@ -38,7 +38,7 @@ class GeminiAI(Cog_Extension):
 
     # Create conversation
     @gemini_group.command(name="conversation", description="Create thread for Gemini conversation.")
-    @app_commands.choices(model=[app_commands.Choice(name="Gemini Pro", value="gemini-pro"), app_commands.Choice(name="Gemini 1.0 Pro", value="gemini-1.0-pro")])
+    @app_commands.choices(model=[app_commands.Choice(name="Gemini 1.0 Pro", value="gemini-pro"), app_commands.Choice(name="Gemini 1.5 Pro", value="gemini-1.5-pro-latest"), app_commands.Choice(name="Gemini 1.5 Flash", value="gemini-1.5-flash-latest")])
     @app_commands.choices(type=[app_commands.Choice(name="private", value="private"), app_commands.Choice(name="public", value="public")])
     @app_commands.choices(harassment=[app_commands.Choice(name="Block few", value="BLOCK_ONLY_HIGH"), app_commands.Choice(name="Block some", value="BLOCK_MEDIUM_AND_ABOVE"), app_commands.Choice(name="Block most", value="BLOCK_LOW_AND_ABOVE")])
     @app_commands.choices(hate_speech=[app_commands.Choice(name="Block few", value="BLOCK_ONLY_HIGH"), app_commands.Choice(name="Block some", value="BLOCK_MEDIUM_AND_ABOVE"), app_commands.Choice(name="Block most", value="BLOCK_LOW_AND_ABOVE")])
