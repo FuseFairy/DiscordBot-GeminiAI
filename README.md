@@ -53,7 +53,7 @@
 
 ```
 pip install -r requirements.txt
-``
+```
 
 ### Get Bard Cookies
 
