@@ -13,35 +13,38 @@ tracemalloc.start()
 
 users_chatbot = {}
 
-async def set_chatbot(user_id, api_key=None, model=None, temperature: float=None, harassment=None,
+async def set_chatbot(user_id, api_key=None, model=None, system_instructions: str=None, temperature: float=None, harassment=None,
                       hate_speech=None, sexually_explicit=None, dangerous_content=None, bard_cookies: list=[]):
     if user_id not in users_chatbot:
         users_chatbot[user_id] = UserChatbot(user_id)
     chatbot = users_chatbot[user_id]
     
     if bard_cookies:
-        chatbot.set_bard_cookies(bard_cookies)
+        chatbot.bard_cookies = bard_cookies
 
     if api_key:
-        chatbot.set_api_key(api_key)
+        chatbot.api_key = api_key
 
     if model:
-        chatbot.set_model(model)
-    
+        chatbot.model = model
+
+    if system_instructions:
+        chatbot.system_instructions = system_instructions
+
     if temperature:
-        chatbot.set_temperature(temperature)
+        chatbot.generation_config["temperature"] = temperature
     
     if harassment:
-        chatbot.set_harassment(harassment)
+        chatbot.safety_settings[0]["threshold"] = harassment
     
     if hate_speech:
-        chatbot.set_hate_speech(hate_speech)
+        chatbot.safety_settings[1]["threshold"] = hate_speech
 
     if sexually_explicit:
-        chatbot.set_sexually_explicit(sexually_explicit)
+        chatbot.safety_settings[2]["threshold"] = sexually_explicit
     
     if dangerous_content:
-        chatbot.set_dangerous_content(dangerous_content)
+        chatbot.safety_settings[3]["threshold"] = dangerous_content
 
 def get_users_chatbot():
     return users_chatbot
@@ -51,6 +54,7 @@ class UserChatbot():
         self.sem_init_chatbot = Semaphore(1)
         self.api_key = None
         self.chatbot = None
+        self.system_instructions = None
         self.bard_chat = None
         self.thread = None
         self.model = None
@@ -82,47 +86,8 @@ class UserChatbot():
             },
         ]
     
-    def set_api_key(self, api_key):
-        self.api_key = api_key
-    
-    def get_api_key(self):
-        return self.api_key
-    
     def del_api_key(self):
         self.api_key=None
-
-    def set_thread(self, thread: discord.threads.Thread):
-        self.thread = thread
-    
-    def get_thread(self) -> discord.threads.Thread:
-        return self.thread
-    
-    def set_model(self, model: str):
-        self.model = model
-    
-    def get_model(self) -> bool:
-        return self.model
-    
-    def get_chatbot(self):
-        return self.chatbot
-    
-    def set_temperature(self, temperature):
-        self.generation_config["temperature"] = temperature
-    
-    def set_harassment(self, harassment):
-        self.safety_settings[0]["threshold"] = harassment
-
-    def set_hate_speech(self, hate_speech):
-        self.safety_settings[1]["threshold"] = hate_speech
-
-    def set_sexually_explicit(self, sexually_explicit):
-        self.safety_settings[2]["threshold"] = sexually_explicit
-
-    def set_dangerous_content(self, dangerous_content):
-        self.safety_settings[3]["threshold"] = dangerous_content
-
-    def set_bard_cookies(self, bard_cookies: list):
-        self.bard_cookies = bard_cookies
     
     def del_bard_cookies(self):
         self.bard_cookies.clear()
@@ -154,7 +119,8 @@ class UserChatbot():
                         genai.configure(api_key=self.api_key)
                         self.g_model = genai.GenerativeModel(model_name=self.model,
                                                     generation_config=self.generation_config,
-                                                    safety_settings=self.safety_settings)
+                                                    safety_settings=self.safety_settings,
+                                                    system_instruction=self.system_instructions)
                         self.chatbot = self.g_model.start_chat(history=[])
                     try:    
                         if self.thread:

@@ -16,7 +16,7 @@ class Event(Cog_Extension):
                 users_chatbot = get_users_chatbot()
                 user_id = message.author.id
                 if user_id in users_chatbot:
-                    user_thread = users_chatbot[user_id].get_thread()
+                    user_thread = users_chatbot[user_id].thread
                 else:
                     return
                 
@@ -33,7 +33,7 @@ class Event(Cog_Extension):
                             else:
                                 await message.channel.send("> **ERROR：This file format is not supported.**")
                                 return
-                    logger.info(f"\x1b[31m{username}\x1b[0m：'{content}' ({channel}) [model：{users_chatbot[user_id].get_model()}]")
+                    logger.info(f"\x1b[31m{username}\x1b[0m：'{content}' ({channel}) [model：{users_chatbot[user_id].model}]")
                     await users_chatbot[user_id].send_message(message=content, images_url=images_url)
                     
         except Exception as e:
