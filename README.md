@@ -12,6 +12,7 @@
 ![demo2](https://i.imgur.com/1U5kBJ0.png)
 
 ## Update
+> ### 2024/6/11：Gemini 1.5 Pro and Gemini 1.5 Flash can use [system instructions](https://ai.google.dev/gemini-api/docs/system-instructions).
 > ### 2024/4/28：Support [Bard](https://gemini.google.com).
 > ### 2023/2/16：Add Gemini 1.0 Pro model.
    
@@ -31,6 +32,7 @@
   * Create a thread exclusively for the user to chat with the bot.
     * [model]：Choose AI model.
     * [type]：Choose thread type, private or public.
+    * [system_instructions](https://ai.google.dev/gemini-api/docs/system-instructions)：Only Gemini 1.5 Pro and Gemini 1.5 Flash can use it.
     * [temperature]：Controls the level of randomness in the output, ranging from highly varied (closer to 1.0) to less surprising (closer to 0.0).
     * [harrassment], [hate_speech], [sexually_explicit], [dangerous_content]：It's [Safety Settings](https://ai.google.dev/docs/safety_setting_gemini#safety-settings), the default is `Block some`.
 
@@ -51,11 +53,7 @@
 
 ```
 pip install -r requirements.txt
-```
-
-### Discord bot permission
-
-![permission](https://i.imgur.com/ZHYlRJH.png)
+``
 
 ### Get Bard Cookies
 
