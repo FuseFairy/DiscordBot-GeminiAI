@@ -44,7 +44,7 @@ class GeminiAI(Cog_Extension):
     @app_commands.choices(hate_speech=[app_commands.Choice(name="Block few", value="BLOCK_ONLY_HIGH"), app_commands.Choice(name="Block some", value="BLOCK_MEDIUM_AND_ABOVE"), app_commands.Choice(name="Block most", value="BLOCK_LOW_AND_ABOVE")])
     @app_commands.choices(sexually_explicit=[app_commands.Choice(name="Block few", value="BLOCK_ONLY_HIGH"), app_commands.Choice(name="Block some", value="BLOCK_MEDIUM_AND_ABOVE"), app_commands.Choice(name="Block most", value="BLOCK_LOW_AND_ABOVE")])
     @app_commands.choices(dangerous_content=[app_commands.Choice(name="Block few", value="BLOCK_ONLY_HIGH"), app_commands.Choice(name="Block some", value="BLOCK_MEDIUM_AND_ABOVE"), app_commands.Choice(name="Block most", value="BLOCK_LOW_AND_ABOVE")])
-    async def chat(self, interaction: discord.Interaction, model: app_commands.Choice[str], type: app_commands.Choice[str], temperature: float=None, 
+    async def chat(self, interaction: discord.Interaction, model: app_commands.Choice[str], type: app_commands.Choice[str], system_instructions: str=None, temperature: float=None, 
                     harassment: app_commands.Choice[str]=None, hate_speech: app_commands.Choice[str]=None, sexually_explicit: app_commands.Choice[str]=None,
                     dangerous_content: app_commands.Choice[str]=None):
         await interaction.response.defer(ephemeral=False, thinking=True)
@@ -52,7 +52,11 @@ class GeminiAI(Cog_Extension):
             return
         
         if isinstance(interaction.channel, discord.Thread):
-            await interaction.followup.send(">> **ERROR：This command is disabled in thread.**")
+            await interaction.followup.send("> **ERROR：This command is disabled in thread.**")
+            return
+        
+        if system_instructions and model.name == "Gemini 1.0 Pro":
+            await interaction.followup.send("> **ERROR：`system_instructions` only supported in Gemini 1.5 Pro and Gemini 1.5 Flash model.**")
             return
 
         user_id = interaction.user.id
@@ -63,7 +67,7 @@ class GeminiAI(Cog_Extension):
         sexually_explicit_value = sexually_explicit.value if sexually_explicit else None
         dangerous_content_value = dangerous_content.value if dangerous_content else None
 
-        await set_chatbot(user_id=user_id, model = model.value, temperature=temperature,
+        await set_chatbot(user_id=user_id, model = model.value, system_instructions=system_instructions, temperature=temperature,
                         harassment=harassment_value, hate_speech=hate_speech_value, sexually_explicit=sexually_explicit_value, dangerous_content=dangerous_content_value)
         await users_chatbot[user_id].initialize_chatbot(interaction, type.value)
 
