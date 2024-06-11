@@ -26,7 +26,7 @@
    
 * `/api_key setting-gemini [choice] [api_key]`
   * Can upload own google api key or delete it. (api key get from https://makersuite.google.com/app/apikey)
-    * [choice]：`delete` or `set` your api key.
+    * [choice]：`delete` or `set` personal api key.
   
 * `/gemini conversation [model] [type] [use_prompt] [use_character]`
   * Create a thread exclusively for the user to chat with the bot.
@@ -38,7 +38,7 @@
 
 * `/cookies setting-bard [choice] [secure_1psid] [secure_1psidts]`
   * Can upload own Bard Cookies or delete it.
-    * [choice]：`delete` or `set` your Bard Cookies.
+    * [choice]：`delete` or `set` personal Bard Cookies.
     * [secure_1psid], [secure_1psidts]：Required Cookie Parameters.
 
 * `/Bard conversation [type]`
