@@ -32,7 +32,7 @@
   * Create a thread exclusively for the user to chat with the bot.
     * [model]：Choose AI model.
     * [type]：Choose thread type, private or public.
-    * [system_instructions](https://ai.google.dev/gemini-api/docs/system-instructions)：Only Gemini 1.5 Pro and Gemini 1.5 Flash can use it.
+    * [[system_instructions](https://ai.google.dev/gemini-api/docs/system-instructions)]：Only Gemini 1.5 Pro and Gemini 1.5 Flash can use it.
     * [temperature]：Controls the level of randomness in the output, ranging from highly varied (closer to 1.0) to less surprising (closer to 0.0).
     * [harrassment], [hate_speech], [sexually_explicit], [dangerous_content]：It's [Safety Settings](https://ai.google.dev/docs/safety_setting_gemini#safety-settings), the default is `Block some`.
 
